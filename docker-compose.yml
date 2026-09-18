@@ -1,0 +1,33 @@
+version: "3.8"
+
+services:
+  backend1:
+    build: ./backend
+    container_name: backend1
+    environment:
+      - SERVER_PORT=8081
+    ports:
+      - "8081:8081"
+
+  backend2:
+    build: ./backend
+    container_name: backend2
+    environment:
+      - SERVER_PORT=8082
+    ports:
+      - "8082:8082"
+
+  haproxy:
+    image: haproxy:2.9
+    container_name: haproxy
+    depends_on:
+      - backend1
+      - backend2
+    ports:
+      - "8080:80"
+      - "8404:8404"
+    volumes:
+      # Swap this file to switch between the O2 baseline and the O3 contribution:
+      #   ./haproxy/haproxy-shallow.cfg  -> naive check (the problem)
+      #   ./haproxy/haproxy-deep.cfg     -> capability-reflecting check (the fix)
+      - ${HAPROXY_CONFIG:-./haproxy/haproxy-shallow.cfg}:/usr/local/etc/haproxy/haproxy.cfg:ro

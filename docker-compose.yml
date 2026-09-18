@@ -28,6 +28,6 @@ services:
       - "8404:8404"
     volumes:
       # Swap this file to switch between the O2 baseline and the O3 contribution:
-      #   ./haproxy/haproxy-shallow.cfg  -> naive check (the problem)
+      #   ./haproxy/haproxy-shallow.cfg  -> naive check (the problem) .
       #   ./haproxy/haproxy-deep.cfg     -> capability-reflecting check (the fix)
       - ${HAPROXY_CONFIG:-./haproxy/haproxy-shallow.cfg}:/usr/local/etc/haproxy/haproxy.cfg:ro
